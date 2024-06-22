@@ -15,6 +15,8 @@ class ViewController: UIViewController {
     var countries = [String]()
     var score = 0
     var correctAnswer = 0
+    var questionsAsked = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         countries += ["estonia","france","germany","ireland","italy","monaco","nigeria","poland","russia","spain","uk","us"]
@@ -39,7 +41,9 @@ class ViewController: UIViewController {
         button2.setImage(UIImage(named: countries[1]), for: .normal)
         button3.setImage(UIImage(named: countries[2]), for: .normal)
         
-        title = countries[correctAnswer].uppercased() + " Score: \(score)"
+        title = countries[correctAnswer].uppercased() + " - Score: \(score)"
+        
+        questionsAsked += 1
     }
     
     
@@ -50,8 +54,16 @@ class ViewController: UIViewController {
             title = "Correct"
             score += 1
         } else {
-            title = "Wrong"
+            title = "Wrong, thats the flag of \(countries[sender.tag].uppercased())"
             score -= 1
+        }
+        
+        if questionsAsked == 10{
+            let ac = UIAlertController(title: title, message: "You have answered 10 questions. Your Final score is: \(score)", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Start over", style: .default, handler: askQuestion))
+            present(ac, animated: true)
+            score = 0
+            questionsAsked = 0
         }
         
         let ac = UIAlertController(title: title, message: "Your score is \(score)", preferredStyle: .alert)
